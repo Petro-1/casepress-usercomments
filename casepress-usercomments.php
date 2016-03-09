@@ -22,7 +22,7 @@ function cp_addmeta_usercomment($mid, $object_id, $meta_key, $_meta_value) {
             // то выводим в текст коммента ссылку на пользователя и логин
             $user_info = get_userdata($user_id);
             $profile_link = add_query_arg('user_id', $user_id, self_admin_url('user-edit.php'));
-            $login = '<a href="' . get_site_url() . '?author=' . $user_info->ID . '">@' . $user_info->user_login . '</a>';
+            $login = '@' . $user_info->user_login;
         } else { //иначе выводим имя персоны и ссылку на персону
             $login = '<a href="' . get_permalink($_meta_value) . '">' . get_the_title($_meta_value) . '</a>';
         }
@@ -42,8 +42,7 @@ function cp_changemeta_usercomment($meta_id, $object_id, $meta_key, $meta_value)
             if ($user_id = get_user_by_person( $meta_value )) { // если можно получить id пользователя,
                 // то выводим в текст коммента ссылку на пользователя и логин
                 $user_info = get_userdata($user_id);
-                $login = '<a href="' . get_site_url() . '?author=' . $user_info->ID . '">@' . $user_info->user_login . '</a>';
-                $login = '<a href="' . $profile_link . '">' . $user_info->user_login . '</a>';
+                $login = '@' . $user_info->user_login;
             } else { //иначе выводим имя персоны и ссылку на персону
                 $login = '<a href="' . get_permalink($_meta_value) . '">' . get_the_title($_meta_value) . '</a>';
             }
