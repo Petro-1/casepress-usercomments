@@ -17,7 +17,7 @@ add_action('update_postmeta', 'cp_changemeta_usercomment', 10, 4); //Сраба�
 
 function cp_addmeta_usercomment($mid, $object_id, $meta_key, $_meta_value) {
     $current_meta = get_post_meta($object_id, $meta_key, 1);
-    if ($meta_key == 'responsible-cp-posts-sql') { //если добавляется мета Ответственный, то добавляем комментарий
+    if ($meta_key == 'responsible-cp-posts-sql' && $_meta_value != '') { //если добавляется мета Ответственный, то добавляем комментарий
         if ($user_id = get_user_by_person( $_meta_value )) { // если можно получить id пользователя,
             // то выводим в текст коммента ссылку на пользователя и логин
             $user_info = get_userdata($user_id);
@@ -38,13 +38,13 @@ function cp_addmeta_usercomment($mid, $object_id, $meta_key, $_meta_value) {
 function cp_changemeta_usercomment($meta_id, $object_id, $meta_key, $meta_value) {
     if ($meta_key == 'responsible-cp-posts-sql') { //если изменяется мета Ответственный, то добавляем комментарий
         $current_meta = get_post_meta($object_id, $meta_key, 1); //Получаем значение меты до изменения
-        if ($current_meta != $meta_value) { //если значение меняется, то добавляем комментарий
+        if ($current_meta != $meta_value && $meta_value != '') { //если значение меняется, то добавляем комментарий
             if ($user_id = get_user_by_person( $meta_value )) { // если можно получить id пользователя,
                 // то выводим в текст коммента ссылку на пользователя и логин
                 $user_info = get_userdata($user_id);
                 $login = '@' . $user_info->user_login;
             } else { //иначе выводим имя персоны и ссылку на персону
-                $login = '<a href="' . get_permalink($_meta_value) . '">' . get_the_title($_meta_value) . '</a>';
+                $login = '<a href="' . get_permalink($meta_value) . '">' . get_the_title($meta_value) . '</a>';
             }
             $data = array(
                 'comment_post_ID'      => $object_id,
